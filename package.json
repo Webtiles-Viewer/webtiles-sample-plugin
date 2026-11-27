@@ -1,0 +1,33 @@
+{
+  "name": "webtiles-sample-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Template for WebTiles plugins.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "vite build",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "check:bundle": "node scripts/check-bundle.mjs",
+    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run check:bundle",
+    "version": "node scripts/version-bump.mjs && git add manifest.json versions.json"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.6",
+    "@webtiles-viewer/plugin-api": "0.1.0-alpha.2",
+    "eslint": "^10.14.0",
+    "globals": "^17.13.0",
+    "happy-dom": "^20.10.4",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.72.1",
+    "vite": "^8.3.5",
+    "vitest": "^4.1.12"
+  }
+}

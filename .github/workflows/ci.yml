@@ -1,0 +1,51 @@
+name: CI
+
+# Slide-free checks on every push and PR: lint, typecheck, unit tests against @webtiles-viewer/plugin-api/testing,
+# build, and the bundle contract (ADR-0001 §8). No `paths` filter, so it can be a required check.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # Reads @webtiles-viewer/plugin-api from GitHub Packages (until it moves to public npm, webtiles#261).
+  packages: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          # Writes the auth line for npm.pkg.github.com that reads NODE_AUTH_TOKEN; only @webtiles-viewer goes there.
+          registry-url: https://npm.pkg.github.com
+          scope: '@webtiles-viewer'
+      # `npm install`, not `npm ci`: vite/rolldown's platform-specific optional dependencies hoist differently on the
+      # OS that wrote the lockfile and on the linux runner.
+      - name: Install
+        run: npm install
+        env:
+          # GITHUB_TOKEN reads the package only from a Webtiles-Viewer repo that the package lists under
+          # "Manage Actions access". Anywhere else, add a repo secret WEBTILES_PACKAGES_TOKEN: a classic token with
+          # read:packages only. Both go once the package is on public npm (webtiles#261).
+          NODE_AUTH_TOKEN: ${{ secrets.WEBTILES_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Test
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Bundle contract
+        run: npm run check:bundle

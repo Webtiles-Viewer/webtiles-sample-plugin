@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/@webtiles-viewer/plugin-api/manifest.schema.json",
+  "id": "sample",
+  "name": "Sample plugin",
+  "version": "0.1.0",
+  "apiVersion": "^0.1.0",
+  "minAppVersion": "0.2.1",
+  "description": "A starting point for WebTiles plugins: a status-bar zoom readout and a command with a hotkey.",
+  "author": "Your name",
+  "authorUrl": "https://github.com/your-account",
+  "repository": "your-account/webtiles-your-plugin",
+  "permissions": [
+    "storage"
+  ]
+}

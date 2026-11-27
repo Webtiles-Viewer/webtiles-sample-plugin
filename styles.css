@@ -1,0 +1,6 @@
+/* Every class is prefixed `wt-<manifest id>-` (ADR-0001 §8), and colours come from the host's `--wt-*` theme
+   tokens, so the plugin follows light and dark mode. */
+.wt-sample-zoom {
+  color: var(--wt-color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
